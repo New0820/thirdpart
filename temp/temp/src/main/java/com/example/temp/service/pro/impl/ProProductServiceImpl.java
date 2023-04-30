@@ -1,8 +1,11 @@
 package com.example.temp.service.pro.impl;
 
+import com.example.temp.entity.param.ParamSaveProduct;
+import com.example.temp.mapper.pro.ProProductMapper;
 import com.example.temp.service.pro.ProProductService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -15,5 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProProductServiceImpl implements ProProductService {
 
+    @Resource
+    private ProProductMapper proProductMapper;
 
+    /**
+     * 添加商品
+     *
+     * @param param
+     */
+    @Override
+    public void saveProduct(ParamSaveProduct param) {
+
+    }
 }

@@ -8,8 +8,7 @@ import java.util.List;
 
 @Data
 @ApiModel(description = "添加商品信息")
-public class SaveProduct {
-
+public class ParamSaveProduct {
 
     @ApiModelProperty(name = "name", value = "商品名称", required = true)
     private String name;
@@ -61,4 +60,10 @@ public class SaveProduct {
 
     @ApiModelProperty(name = "totalNum", value = "库存", required = true)
     private String totalNum;
+
+    @ApiModelProperty(hidden = true)
+    private Integer userId;
+
+    @ApiModelProperty(hidden = true)
+    private Integer shopId;
 }
