@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.temp.mapper.pro.ProProductMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.temp.entity.pro.ProProduct">
+
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="biz_id" jdbcType="VARCHAR" property="bizId"/>
+
+        <result column="doudian_classify_id" jdbcType="INTEGER" property="doudianClassifyId"/>
+
+        <result column="fk_shp_shop_id" jdbcType="INTEGER" property="fkShpShopId"/>
+
+        <result column="fk_pro_state_code" jdbcType="INTEGER" property="fkProStateCode"/>
+
+        <result column="fk_pro_attribute_code" jdbcType="VARCHAR" property="fkProAttributeCode"/>
+
+        <result column="fk_pro_classify_code" jdbcType="VARCHAR" property="fkProClassifyCode"/>
+
+        <result column="fk_pro_classify_sub_id" jdbcType="VARCHAR" property="fkProClassifySubId"/>
+
+        <result column="fk_pro_recycle_id" jdbcType="INTEGER" property="fkProRecycleId"/>
+
+        <result column="fk_pro_tag_id" jdbcType="VARCHAR" property="fkProTagId"/>
+
+        <result column="fk_pro_classify_sub_name" jdbcType="VARCHAR" property="fkProClassifySubName"/>
+
+        <result column="fk_pro_sub_series_name" jdbcType="VARCHAR" property="fkProSubSeriesName"/>
+
+        <result column="fk_pro_series_model_name" jdbcType="VARCHAR" property="fkProSeriesModelName"/>
+
+        <result column="fk_pro_public_id" jdbcType="INTEGER" property="fkProPublicId"/>
+
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+
+        <result column="article_number" jdbcType="VARCHAR" property="articleNumber"/>
+
+        <result column="quality" jdbcType="VARCHAR" property="quality"/>
+
+        <result column="target_user" jdbcType="VARCHAR" property="targetUser"/>
+
+        <result column="tag" jdbcType="VARCHAR" property="tag"/>
+
+        <result column="total_num" jdbcType="INTEGER" property="totalNum"/>
+
+        <result column="sale_num" jdbcType="INTEGER" property="saleNum"/>
+
+        <result column="union_num" jdbcType="INTEGER" property="unionNum"/>
+
+        <result column="hot" jdbcType="CHAR" property="hot"/>
+
+        <result column="share" jdbcType="VARCHAR" property="share"/>
+
+        <result column="xianyu_sync_state" jdbcType="VARCHAR" property="xianyuSyncState"/>
+
+        <result column="yanhuobao" jdbcType="VARCHAR" property="yanhuobao"/>
+
+        <result column="kuaishou_sync_state" jdbcType="VARCHAR" property="kuaishouSyncState"/>
+
+        <result column="doudian_sync_state" jdbcType="VARCHAR" property="doudianSyncState"/>
+
+        <result column="ninetyfive_sync_state" jdbcType="VARCHAR" property="ninetyfiveSyncState"/>
+
+        <result column="lock_source" jdbcType="VARCHAR" property="lockSource"/>
+
+        <result column="init_price" jdbcType="DECIMAL" property="initPrice"/>
+
+        <result column="trade_price" jdbcType="DECIMAL" property="tradePrice"/>
+
+        <result column="agency_price" jdbcType="DECIMAL" property="agencyPrice"/>
+
+        <result column="sale_price" jdbcType="DECIMAL" property="salePrice"/>
+
+        <result column="public_price" jdbcType="INTEGER" property="publicPrice"/>
+
+        <result column="finish_price" jdbcType="DECIMAL" property="finishPrice"/>
+
+        <result column="small_img" jdbcType="VARCHAR" property="smallImg"/>
+
+        <result column="public_product_img" jdbcType="VARCHAR" property="publicProductImg"/>
+
+        <result column="biz_date" jdbcType="DATE" property="bizDate"/>
+
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+
+        <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime"/>
+
+        <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime"/>
+
+        <result column="lock_user_id" jdbcType="INTEGER" property="lockUserId"/>
+
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+
+        <result column="save_end_time" jdbcType="TIMESTAMP" property="saveEndTime"/>
+
+        <result column="insert_admin" jdbcType="INTEGER" property="insertAdmin"/>
+
+        <result column="update_admin" jdbcType="INTEGER" property="updateAdmin"/>
+
+        <result column="versions" jdbcType="INTEGER" property="versions"/>
+
+        <result column="del" jdbcType="CHAR" property="del"/>
+
+        <result column="union_state" jdbcType="VARCHAR" property="unionState"/>
+
+        <result column="delete_remark" jdbcType="VARCHAR" property="deleteRemark"/>
+
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
+        <result column="recycle_admin" jdbcType="INTEGER" property="recycleAdmin"/>
+
+        <result column="recycle_img" jdbcType="VARCHAR" property="recycleImg"/>
+
+        <result column="appraisal_admin" jdbcType="INTEGER" property="appraisalAdmin"/>
+
+        <result column="retrieve_remark" jdbcType="VARCHAR" property="retrieveRemark"/>
+
+        <result column="fk_shp_retrieve_user_id" jdbcType="INTEGER" property="fkShpRetrieveUserId"/>
+
+        <result column="retrieve_time" jdbcType="TIMESTAMP" property="retrieveTime"/>
+
+        <result column="convey_state" jdbcType="VARCHAR" property="conveyState"/>
+
+        <result column="fk_pro_convey_id" jdbcType="INTEGER" property="fkProConveyId"/>
+
+        <result column="refresh_time" jdbcType="TIMESTAMP" property="refreshTime"/>
+
+        <result column="recycle_time" jdbcType="DATE" property="recycleTime"/>
+
+        <result column="total_additional_cost_price" jdbcType="DECIMAL" property="totalAdditionalCostPrice"/>
+
+    </resultMap>
+
+</mapper>
