@@ -1,8 +1,11 @@
 package com.example.temp.service.pro.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.temp.entity.param.ParamSaveProduct;
+import com.example.temp.entity.pro.ProProduct;
 import com.example.temp.mapper.pro.ProProductMapper;
 import com.example.temp.service.pro.ProProductService;
+import com.example.temp.util.LocalUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,5 +32,19 @@ public class ProProductServiceImpl implements ProProductService {
     @Override
     public void saveProduct(ParamSaveProduct param) {
 
+    }
+
+
+    /**
+     * 根据商品id获取详情信息
+     * @param proId
+     * @return
+     */
+    public ProProduct getProductById(Integer proId){
+        ProProduct proProduct = proProductMapper.selectById(proId);
+        if (LocalUtils.isEmptyAndNull(proProduct)){
+            //todo "提示商品不存在";
+        }
+        return proProduct;
     }
 }
