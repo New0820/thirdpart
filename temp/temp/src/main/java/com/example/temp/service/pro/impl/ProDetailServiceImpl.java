@@ -49,4 +49,13 @@ public class ProDetailServiceImpl extends ServiceImpl<ProDetailMapper, ProDetail
     public void saveProDetail(ProDetail proDetail) {
         save(proDetail);
     }
+
+    /**
+     * 根据id修改商品详情
+     * @param proDetail
+     */
+    @Override
+    public void updateProDetail(ProDetail proDetail) {
+        updateById(proDetail);
+    }
 }

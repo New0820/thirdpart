@@ -26,4 +26,10 @@ public interface ProDetailService {
      * @param proDetail
      */
     void saveProDetail(ProDetail proDetail);
+
+    /**
+     * 修改商品详情
+     * @param proDetail
+     */
+    void updateProDetail(ProDetail proDetail);
 }

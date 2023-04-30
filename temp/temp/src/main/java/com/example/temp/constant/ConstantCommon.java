@@ -316,4 +316,15 @@ ConstantCommon {
      */
     public static final String trade = "trade";
 
+
+    /**
+     * es中传入参数是save
+     */
+    public static final String ES_SAVE = "save";
+
+    /**
+     * es中传入参数是update
+     */
+    public static final String ES_UPDATE = "update";
+
 }
