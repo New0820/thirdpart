@@ -5,15 +5,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.temp.constant.ConstantCommon;
 import com.example.temp.constant.ConstantNums;
 import com.example.temp.constant.ConstantRedisKey;
-import com.example.temp.entity.pro.ProDetail;
-import com.example.temp.entity.pro.ProProduct;
+import com.example.temp.entity.pro.*;
 import com.example.temp.enums.shp.EnumShpOperateLogModule;
 import com.example.temp.mapper.pro.ProProductMapper;
 import com.example.temp.param.ParamSaveProduct;
 import com.example.temp.param.ParamShpOperateLogSave;
 import com.example.temp.param.ParamUpdateProduct;
-import com.example.temp.service.pro.ProDetailService;
-import com.example.temp.service.pro.ProProductService;
+import com.example.temp.service.pro.*;
 import com.example.temp.service.shp.ShpOperateLogService;
 import com.example.temp.util.LocalUtils;
 import com.example.temp.util.RedisUtil;
@@ -52,6 +50,15 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
     @Resource
     private ServicesUtil servicesUtil;
 
+    @Resource
+    private ProBrandService proBrandService;
+
+    @Resource
+    private ProBrandSeriesService proBrandSeriesService;
+
+    @Resource
+    private ProBrandModelService proBrandModelService;
+
     /**
      * 添加商品
      *
@@ -86,15 +93,10 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         shpOperateLogSave.setOperateUserId(param.getUserId());
         shpOperateLogSave.setModuleName(EnumShpOperateLogModule.PROD.getName());
         shpOperateLogSave.setOperateName("商品入库");
-        String str;
-        if ("20".equals(param.getAttributes())) {
-            str = "到手价:";
-        } else {
-            str = "成本价:";
-        }
+        String str = "成本价:";
         String beforeValue = str + formatPrice(param.getInitPrice()) + ",同行价:" + formatPrice(param.getTradePrice())
                 + ",代理价:" + formatPrice(param.getAgencyPrice()) + ",销售价:" + formatPrice(param.getSalePrice()) + ",商品属性:"
-                + servicesUtil.getAttributeCn(param.getAttributes(), true);
+                + servicesUtil.getAttributeCn(ConstantNums.TEN.toString(), true);
         String prodName = param.getName() + "商品信息：" + beforeValue;
         shpOperateLogSave.setOperateContent(prodName);
         shpOperateLogSave.setProdId(param.getProId());
@@ -179,10 +181,35 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         if (!LocalUtils.isEmptyAndNull(param.getProductList())) {
             proDetail.setProductImg(LocalUtils.getStringFromList(param.getProductList()));
         }
+
+        //获取品牌名称
+        if (!LocalUtils.isEmptyAndNull(param.getBrandId())) {
+            ProBrand proBrand = proBrandService.getProBrandById(Integer.parseInt(param.getBrandId()));
+            proProduct.setFkProClassifySubName(proBrand.getEnName());
+        }
+
+        //如果品牌id为空，系列id不为空
+        if (LocalUtils.isEmptyAndNull(param.getBrandId()) && !LocalUtils.isEmptyAndNull(param.getSeriesId())) {
+            //todo 提示请选择品牌
+        } else {
+            //获取系列名称
+            ProBrandSeries proBrandSeries = proBrandSeriesService.getProBrandSeriesByIdOrBrandId(Integer.parseInt(param.getSeriesId()), Integer.parseInt(param.getBrandId()));
+            proProduct.setFkProSubSeriesName(proBrandSeries.getName());
+        }
+
+        //如果品牌和系列为空，型号不为空
+        boolean flag = LocalUtils.isEmptyAndNull(param.getBrandId()) || LocalUtils.isEmptyAndNull(param.getSeriesId());
+        if (flag && !LocalUtils.isEmptyAndNull(param.getModelId())) {
+            //todo 提示请选择系列
+        } else {
+            ProBrandModel proBrandModel = proBrandModelService.getByBrandModelByIdOrSeriesId(Integer.parseInt(param.getSeriesId()), Integer.parseInt(param.getModelId()));
+            proProduct.setFkProSeriesModelName(proBrandModel.getName());
+        }
+
         //商品名称
         proProduct.setName(param.getName());
         //商品属性
-        proProduct.setFkProAttributeCode(param.getAttributes());
+        proProduct.setFkProAttributeCode(ConstantNums.TEN.toString());
         //商品分类
         proProduct.setFkProClassifyCode(param.getClassify());
         //商品首图

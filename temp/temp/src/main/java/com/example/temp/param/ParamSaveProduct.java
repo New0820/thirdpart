@@ -29,9 +29,6 @@ public class ParamSaveProduct {
     @ApiModelProperty(name = "video", value = "视频", required = false)
     private String video;
 
-    @ApiModelProperty(name = "attribute", value = "商品属性", required = true)
-    private String attributes;
-
     @ApiModelProperty(name = "classify", value = "分类", required = true)
     private String classify;
 

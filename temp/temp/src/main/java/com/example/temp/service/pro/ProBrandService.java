@@ -1,5 +1,7 @@
 package com.example.temp.service.pro;
 
+import com.example.temp.entity.pro.ProBrand;
+
 /**
  * 商品品牌表 service
  *
@@ -8,5 +10,12 @@ package com.example.temp.service.pro;
  */
 public interface ProBrandService {
 
+
+    /**
+     * 根据id查询品牌信息
+     * @param id
+     * @return
+     */
+    ProBrand getProBrandById(Integer id);
 
 }
