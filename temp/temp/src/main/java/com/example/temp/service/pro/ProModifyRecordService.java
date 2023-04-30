@@ -18,10 +18,4 @@ public interface ProModifyRecordService {
      */
     void saveProModifyRecord(ParamProductSave param);
 
-    /**
-     * 添加商品数量记录信息
-     *
-     * @param param
-     */
-    void saveProModifyRecordNum(ParamProductSave param);
 }

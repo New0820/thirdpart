@@ -12,9 +12,12 @@ import com.example.temp.service.pro.ProModifyRecordService;
 import com.example.temp.service.pro.ProProductService;
 import com.example.temp.util.LocalUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -30,13 +33,15 @@ public class ProModifyRecordServiceImpl extends ServiceImpl<ProModifyRecordMappe
     private ProProductService proProductService;
 
     /**
-     * 添加商品操作记录信息
+     * 添加商品操作记录
      *
      * @param param
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveProModifyRecord(ParamProductSave param) {
         if (!LocalUtils.isEmptyAndNull(param)) {
+            List<ProModifyRecord> proModifyRecords = new ArrayList<>();
             ProModifyRecord proModifyRecord = new ProModifyRecord();
             proModifyRecord.setFkShpShopId(param.getShopId());
             proModifyRecord.setFkShpUserId(param.getUserId());
@@ -48,29 +53,19 @@ public class ProModifyRecordServiceImpl extends ServiceImpl<ProModifyRecordMappe
             proModifyRecord.setBeforeValue(param.getName() + "商品信息：" + beforeValue);
             proModifyRecord.setAfterValue(beforeValue);
             proModifyRecord.setInsertTime(new Date());
-            save(proModifyRecord);
-        }
-    }
-
-    /**
-     * 添加商品数量记录信息
-     *
-     * @param param
-     */
-    @Override
-    public void saveProModifyRecordNum(ParamProductSave param) {
-        if (!LocalUtils.isEmptyAndNull(param)) {
-            ProModifyRecord proModifyRecord = new ProModifyRecord();
-            proModifyRecord.setFkShpShopId(param.getShopId());
-            proModifyRecord.setFkShpUserId(param.getUserId());
-            proModifyRecord.setFkProProductId(param.getProId());
-            proModifyRecord.setType(EnumProModifyRecordType.UPLOAD.getCode());
-            proModifyRecord.setAttributeName(EnumProModifyRecordState.SAVE_UPLOAD_NUM.getMsg());
-            proModifyRecord.setSource(EnumShpSource.SHEBAOBAO.getMsg());
-            proModifyRecord.setBeforeValue(ConstantCommon.ZERO);
-            proModifyRecord.setAfterValue(ConstantCommon.ONE);
-            proModifyRecord.setInsertTime(new Date());
-            save(proModifyRecord);
+            proModifyRecords.add(proModifyRecord);
+            ProModifyRecord proModifyRecordNum = new ProModifyRecord();
+            proModifyRecordNum.setFkShpShopId(param.getShopId());
+            proModifyRecordNum.setFkShpUserId(param.getUserId());
+            proModifyRecordNum.setFkProProductId(param.getProId());
+            proModifyRecordNum.setType(EnumProModifyRecordType.UPLOAD.getCode());
+            proModifyRecordNum.setAttributeName(EnumProModifyRecordState.SAVE_UPLOAD_NUM.getMsg());
+            proModifyRecordNum.setSource(EnumShpSource.SHEBAOBAO.getMsg());
+            proModifyRecordNum.setBeforeValue(ConstantCommon.ZERO);
+            proModifyRecordNum.setAfterValue(ConstantCommon.ONE);
+            proModifyRecordNum.setInsertTime(new Date());
+            proModifyRecords.add(proModifyRecordNum);
+            saveBatch(proModifyRecords);
         }
     }
 }

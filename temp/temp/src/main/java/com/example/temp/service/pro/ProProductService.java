@@ -21,9 +21,16 @@ public interface ProProductService {
 
     /**
      * 修改商品
+     *
      * @param param
      */
     void updateProduct(ParamProductUpdate param);
 
+    /**
+     * 获取修改前信息
+     *
+     * @param param
+     * @return
+     */
     String getBeforeValue(ParamProductSave param);
 }

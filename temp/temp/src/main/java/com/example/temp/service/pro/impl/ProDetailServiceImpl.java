@@ -7,6 +7,7 @@ import com.example.temp.mapper.pro.ProDetailMapper;
 import com.example.temp.service.pro.ProDetailService;
 import com.example.temp.util.LocalUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -46,6 +47,7 @@ public class ProDetailServiceImpl extends ServiceImpl<ProDetailMapper, ProDetail
      * @param proDetail
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveProDetail(ProDetail proDetail) {
         save(proDetail);
     }

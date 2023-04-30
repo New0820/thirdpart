@@ -2,20 +2,19 @@ package com.example.temp.service.pro.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.temp.common.base.BaseResult;
 import com.example.temp.constant.ConstantCommon;
 import com.example.temp.constant.ConstantNums;
 import com.example.temp.constant.ConstantRedisKey;
 import com.example.temp.entity.pro.*;
-import com.example.temp.enums.pro.EnumProState;
-import com.example.temp.enums.pro.EnumProModifyRecordState;
-import com.example.temp.enums.pro.EnumProModifyRecordType;
+import com.example.temp.enums.fin.EnumFinFundRecordClassifyName;
 import com.example.temp.enums.fin.EnumFinShopRecordInoutType;
+import com.example.temp.enums.pro.EnumProAttribute;
+import com.example.temp.enums.pro.EnumProPriceName;
+import com.example.temp.enums.pro.EnumProState;
 import com.example.temp.enums.shp.EnumShpOperateLogModule;
-import com.example.temp.enums.shp.EnumShpSource;
+import com.example.temp.enums.shp.EnumShpOperateLogTypeName;
 import com.example.temp.mapper.pro.ProProductMapper;
 import com.example.temp.param.fin.ParamFundRecordSave;
-import com.example.temp.param.pro.ParamProModifyRecordSave;
 import com.example.temp.param.pro.ParamProductSave;
 import com.example.temp.param.pro.ParamProductUpdate;
 import com.example.temp.param.shp.ParamShpOperateLogSave;
@@ -28,6 +27,7 @@ import com.example.temp.util.ServicesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -86,6 +86,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      * @param param
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveProduct(ParamProductSave param) {
         ParamProductUpdate paramUpdateProduct = new ParamProductUpdate();
         BeanUtils.copyProperties(paramUpdateProduct, param);
@@ -93,6 +94,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         Map<String, Object> map = checkProductParam(paramUpdateProduct);
         ProProduct proProduct = (ProProduct) map.get("proProduct");
         Date date = new Date();
+        //生成独立编码
         long autoNumber = 0L;
         try {
             //生成独立编码
@@ -119,8 +121,6 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         finBillService.saveProductFundRecord(paramFundRecordSave);
         //商品记录信息
         proModifyRecordService.saveProModifyRecord(param);
-        //添加商品数量记录信息
-        proModifyRecordService.saveProModifyRecordNum(param);
         productEsService.jointProInfo(proProduct, proDetail, ConstantCommon.ES_SAVE);
     }
 
@@ -138,7 +138,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         fundRecordSave.setState(EnumFinShopRecordInoutType.OUT.getName());
         fundRecordSave.setFundType(ConstantCommon.TEN);
         fundRecordSave.setCount(ConstantCommon.ONE);
-        fundRecordSave.setFinClassifyName("入库记录");
+        fundRecordSave.setFinClassifyName(EnumFinFundRecordClassifyName.UPLOAD_RECORD.getMsg());
         fundRecordSave.setAttributeCode(ConstantCommon.TEN);
         return fundRecordSave;
     }
@@ -154,7 +154,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         shpOperateLogSave.setShopId(param.getShopId());
         shpOperateLogSave.setOperateUserId(param.getUserId());
         shpOperateLogSave.setModuleName(EnumShpOperateLogModule.PROD.getName());
-        shpOperateLogSave.setOperateName("商品入库");
+        shpOperateLogSave.setOperateName(EnumShpOperateLogTypeName.PRO_UPLOAD.getMsg());
         String beforeValue = getBeforeValue(param);
         String prodName = param.getName() + "商品信息：" + beforeValue;
         shpOperateLogSave.setOperateContent(prodName);
@@ -171,9 +171,11 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      */
     @Override
     public String getBeforeValue(ParamProductSave param) {
-        return "成本价:" + formatPrice(param.getInitPrice()) + ",同行价:" + formatPrice(param.getTradePrice())
-                + ",代理价:" + formatPrice(param.getAgencyPrice()) + ",销售价:" + formatPrice(param.getSalePrice()) + ",商品属性:"
-                + servicesUtil.getAttributeCn(ConstantNums.TEN.toString(), true);
+        return EnumProPriceName.INIT_PRICE + ":" + formatPrice(param.getInitPrice()) + "," +
+                EnumProPriceName.TRADE_PRICE + ":" + formatPrice(param.getTradePrice()) + "," +
+                EnumProPriceName.AGENCY_PRICE + ":" + formatPrice(param.getAgencyPrice()) + "," +
+                EnumProPriceName.SALE_PRICE + ":" + formatPrice(param.getSalePrice()) + ",商品属性:"
+                + servicesUtil.getAttributeCn(EnumProAttribute.OWN.getCode().toString(), true);
     }
 
     /**
