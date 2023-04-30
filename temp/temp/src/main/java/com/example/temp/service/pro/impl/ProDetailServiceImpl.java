@@ -1,7 +1,7 @@
 package com.example.temp.service.pro.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.temp.entity.entity.pro.ProDetail;
+import com.example.temp.entity.pro.ProDetail;
 import com.example.temp.mapper.pro.ProDetailMapper;
 import com.example.temp.service.pro.ProDetailService;
 import org.springframework.stereotype.Service;

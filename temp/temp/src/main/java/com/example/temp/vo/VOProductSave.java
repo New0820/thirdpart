@@ -1,7 +1,6 @@
-package com.example.temp.entity.vo;
+package com.example.temp.vo;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data

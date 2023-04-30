@@ -1,7 +1,7 @@
 package com.example.temp.mapper.shp;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.temp.entity.entity.shp.ShpOperateLog;
+import com.example.temp.entity.shp.ShpOperateLog;
 import org.springframework.stereotype.Repository;
 
 

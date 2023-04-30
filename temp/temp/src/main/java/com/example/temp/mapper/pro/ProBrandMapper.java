@@ -1,7 +1,7 @@
 package com.example.temp.mapper.pro;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.temp.entity.entity.pro.ProBrand;
+import com.example.temp.entity.pro.ProBrand;
 import org.springframework.stereotype.Repository;
 
 

@@ -1,4 +1,4 @@
-package com.example.temp.entity.entity.pro;
+package com.example.temp.entity.pro;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,14 +8,14 @@ import java.util.Date;
 
 
 /**
- * 商品系列表 bean
+ * 商品型号表 bean
  *
  * @author taoqimin
- * @Date 2023-04-30 17:30:58
+ * @Date 2023-04-30 17:30:42
  */
-@ApiModel(description = "商品系列表")
+@ApiModel(description = "商品型号表")
 @Data
-public class ProBrandSeries {
+public class ProBrandModel {
 
 
     /**
@@ -24,9 +24,9 @@ public class ProBrandSeries {
     @ApiModelProperty(value = "主键Id,逻辑id,软件内部关联")
     private Integer id;
     /**
-     * 系列名称
+     * 型号名称
      */
-    @ApiModelProperty(value = "系列名称")
+    @ApiModelProperty(value = "型号名称")
     private String name;
     /**
      * 俗称
@@ -39,15 +39,20 @@ public class ProBrandSeries {
     @ApiModelProperty(value = "分类")
     private String fkProClassifyCode;
     /**
-     * 品牌id
+     * 系列id
      */
-    @ApiModelProperty(value = "品牌id")
-    private Integer fkProBrandId;
+    @ApiModelProperty(value = "系列id")
+    private Integer fkProBrandSeriesId;
     /**
      * shp_shop的id字段,主键id
      */
     @ApiModelProperty(value = "shp_shop的id字段,主键id")
     private Integer fkShpShopId;
+    /**
+     * 公价id
+     */
+    @ApiModelProperty(value = "公价id")
+    private Integer fkProPublicId;
     /**
      * 类型;0:系统自带;1:用户自建
      */
@@ -93,4 +98,5 @@ public class ProBrandSeries {
      */
     @ApiModelProperty(value = "是否逻辑删除;0:false:不删除;1:true:逻辑删除;对用户显示，所有查询sql都要带上del=0这个条件")
     private String del;
+
 }

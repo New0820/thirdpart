@@ -1,10 +1,8 @@
-package com.example.temp.entity.param;
+package com.example.temp.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @author new

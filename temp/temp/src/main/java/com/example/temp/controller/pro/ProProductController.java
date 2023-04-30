@@ -1,7 +1,7 @@
 package com.example.temp.controller.pro;
 
 import com.example.temp.common.base.BaseController;
-import com.example.temp.entity.param.ParamSaveProduct;
+import com.example.temp.param.ParamSaveProduct;
 import com.example.temp.service.pro.ProProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

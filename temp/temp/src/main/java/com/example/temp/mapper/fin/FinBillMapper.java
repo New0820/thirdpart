@@ -1,7 +1,7 @@
 package com.example.temp.mapper.fin;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.temp.entity.entity.fin.FinBill;
+import com.example.temp.entity.fin.FinBill;
 import org.springframework.stereotype.Repository;
 
 
