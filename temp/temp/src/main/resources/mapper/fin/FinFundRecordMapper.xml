@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.temp.mapper.fin.FinFundRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.temp.entity.entity.fin.FinFundRecord">
+
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="fk_fin_bill_id" jdbcType="INTEGER" property="fkFinBillId"/>
+
+        <result column="money" jdbcType="DECIMAL" property="money"/>
+
+        <result column="init_price" jdbcType="DECIMAL" property="initPrice"/>
+
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+
+        <result column="way" jdbcType="VARCHAR" property="way"/>
+
+        <result column="fin_classify_name" jdbcType="VARCHAR" property="finClassifyName"/>
+
+        <result column="fund_type" jdbcType="VARCHAR" property="fundType"/>
+
+        <result column="fk_shp_shop_id" jdbcType="INTEGER" property="fkShpShopId"/>
+
+        <result column="fk_ord_order_id" jdbcType="INTEGER" property="fkOrdOrderId"/>
+
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+
+        <result column="happen_time" jdbcType="TIMESTAMP" property="happenTime"/>
+
+        <result column="insert_admin" jdbcType="INTEGER" property="insertAdmin"/>
+
+        <result column="update_admin" jdbcType="INTEGER" property="updateAdmin"/>
+
+        <result column="versions" jdbcType="INTEGER" property="versions"/>
+
+        <result column="del" jdbcType="CHAR" property="del"/>
+
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
+    </resultMap>
+
+
+</mapper>

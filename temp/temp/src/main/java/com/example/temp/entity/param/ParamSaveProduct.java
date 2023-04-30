@@ -58,9 +58,6 @@ public class ParamSaveProduct {
     @ApiModelProperty(name = "uniqueCode", value = "独立编码", required = false)
     private String uniqueCode;
 
-    @ApiModelProperty(name = "totalNum", value = "库存", required = true)
-    private String totalNum;
-
     @ApiModelProperty(hidden = true)
     private Integer userId;
 

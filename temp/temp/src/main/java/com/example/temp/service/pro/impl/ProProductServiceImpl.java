@@ -1,13 +1,13 @@
 package com.example.temp.service.pro.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.temp.constant.ConstantCommon;
 import com.example.temp.constant.ConstantNums;
 import com.example.temp.constant.ConstantRedisKey;
 import com.example.temp.entity.param.ParamSaveProduct;
 import com.example.temp.entity.param.ParamUpdateProduct;
-import com.example.temp.entity.pro.ProProduct;
+import com.example.temp.entity.entity.pro.ProProduct;
 import com.example.temp.mapper.pro.ProProductMapper;
 import com.example.temp.service.pro.ProProductService;
 import com.example.temp.util.LocalUtils;
@@ -42,7 +42,10 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
     public void saveProduct(ParamSaveProduct param) {
         if (!isUpload(param.getShopId())) {
             //大于30件商品。不能入库
+            //EnumResponseMessage.SHOP_NOT_VIP_PRODUCT_THIRTY;
         }
+        //调用公共方法判断
+
     }
 
 
@@ -69,9 +72,9 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         String memberState = redisUtil.get(ConstantRedisKey.getMemberStateRedisKeyByShopId(shopId));
         Integer productNum = 0;
         if (!(ConstantCommon.ZERO + ConstantCommon.ONE).contains(memberState)) {
-            QueryWrapper<ProProduct> query = new QueryWrapper<>();
-            query.eq("fk_shp_shop_id", shopId);
-            query.between("fk_pro_state_code", ConstantNums.TEN,ConstantNums.TWENTY_NINE);
+            LambdaQueryWrapper<ProProduct> query = new LambdaQueryWrapper<>();
+            query.eq(ProProduct::getFkShpShopId, shopId);
+            query.between(ProProduct::getFkProStateCode, ConstantNums.TEN, ConstantNums.TWENTY_NINE);
             productNum = proProductMapper.selectCount(query);
         }
         return productNum >= ConstantNums.THIRTY;

@@ -1,8 +1,10 @@
 package com.example.temp.service.pro.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.temp.entity.entity.pro.ProDetail;
+import com.example.temp.mapper.pro.ProDetailMapper;
 import com.example.temp.service.pro.ProDetailService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -12,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @Date 2023-04-30 11:47:28
  */
 @Service
-public class ProDetailServiceImpl implements ProDetailService {
+public class ProDetailServiceImpl extends ServiceImpl<ProDetailMapper, ProDetail> implements ProDetailService {
 
 
 }

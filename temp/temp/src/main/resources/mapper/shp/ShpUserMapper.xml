@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.temp.mapper.shp.ShpUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.temp.entity.entity.shp.ShpUser">
+
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+
+        <result column="number" jdbcType="INTEGER" property="number"/>
+
+        <result column="default_login" jdbcType="CHAR" property="defaultLogin"/>
+
+        <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl"/>
+
+        <result column="fk_shp_shop_id" jdbcType="INTEGER" property="fkShpShopId"/>
+
+        <result column="fk_op_channel_id" jdbcType="INTEGER" property="fkOpChannelId"/>
+
+        <result column="bind_we_chat" jdbcType="INTEGER" property="bindWeChat"/>
+
+        <result column="bind_apple" jdbcType="INTEGER" property="bindApple"/>
+
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+
+        <result column="insert_admin" jdbcType="INTEGER" property="insertAdmin"/>
+
+        <result column="update_admin" jdbcType="INTEGER" property="updateAdmin"/>
+
+        <result column="versions" jdbcType="INTEGER" property="versions"/>
+
+        <result column="del" jdbcType="CHAR" property="del"/>
+
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
+        <result column="jg_push_reg_id" jdbcType="VARCHAR" property="jgPushRegId"/>
+
+        <result column="app_version" jdbcType="VARCHAR" property="appVersion"/>
+
+        <result column="phone_tail" jdbcType="VARCHAR" property="phoneTail"/>
+
+    </resultMap>
+
+
+</mapper>

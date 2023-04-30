@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.temp.mapper.shp.ShpOperateLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.temp.entity.entity.shp.ShpOperateLog">
+
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="fk_shp_shop_id" jdbcType="INTEGER" property="fkShpShopId"/>
+
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+
+        <result column="operate_user_id" jdbcType="INTEGER" property="operateUserId"/>
+
+        <result column="operate_user_shop_name" jdbcType="VARCHAR" property="operateUserShopName"/>
+
+        <result column="module_name" jdbcType="VARCHAR" property="moduleName"/>
+
+        <result column="operate_type_name" jdbcType="VARCHAR" property="operateTypeName"/>
+
+        <result column="operate_content" jdbcType="LONGVARCHAR" property="operateContent"/>
+
+        <result column="operate_after" jdbcType="LONGVARCHAR" property="operateAfter"/>
+
+        <result column="operate_date" jdbcType="VARCHAR" property="operateDate"/>
+
+        <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime"/>
+
+        <result column="request_domain" jdbcType="VARCHAR" property="requestDomain"/>
+
+        <result column="request_uri" jdbcType="VARCHAR" property="requestUri"/>
+
+        <result column="request_param" jdbcType="LONGVARCHAR" property="requestParam"/>
+
+        <result column="request_ip" jdbcType="VARCHAR" property="requestIp"/>
+
+        <result column="request_method" jdbcType="VARCHAR" property="requestMethod"/>
+
+        <result column="fk_pro_product_id" jdbcType="INTEGER" property="fkProProductId"/>
+
+        <result column="fk_ord_order_id" jdbcType="INTEGER" property="fkOrdOrderId"/>
+
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+
+    </resultMap>
+
+
+</mapper>

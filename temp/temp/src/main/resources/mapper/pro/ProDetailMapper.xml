@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.temp.mapper.pro.ProDetailMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.temp.entity.pro.ProDetail">
+    <resultMap id="BaseResultMap" type="com.example.temp.entity.entity.pro.ProDetail">
 
         <id column="id" jdbcType="INTEGER" property="id"/>
 
