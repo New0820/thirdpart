@@ -14,8 +14,16 @@ public interface ProDetailService {
 
     /**
      * 根据商品id查询商品详情信息
+     *
      * @param proId
      * @return
      */
     ProDetail getProDetailByProId(Integer proId);
+
+    /**
+     * 添加商品详情信息
+     *
+     * @param proDetail
+     */
+    void saveProDetail(ProDetail proDetail);
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.temp.mapper.shp.ShpUserShopRefMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.temp.entity.shp.ShpUserShopRef">
+
+        <id column="id" jdbcType="INTEGER" property="id"/>
+
+        <result column="fk_shp_shop_id" jdbcType="INTEGER" property="fkShpShopId"/>
+
+        <result column="fk_shp_user_id" jdbcType="INTEGER" property="fkShpUserId"/>
+
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+
+        <result column="fk_shp_user_type_id" jdbcType="INTEGER" property="fkShpUserTypeId"/>
+
+        <result column="type" jdbcType="INTEGER" property="type"/>
+
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+
+        <result column="wechat" jdbcType="VARCHAR" property="wechat"/>
+
+        <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
+
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+
+        <result column="insert_admin" jdbcType="INTEGER" property="insertAdmin"/>
+
+        <result column="update_admin" jdbcType="INTEGER" property="updateAdmin"/>
+
+        <result column="versions" jdbcType="INTEGER" property="versions"/>
+
+        <result column="del" jdbcType="CHAR" property="del"/>
+
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
+    </resultMap>
+
+</mapper>

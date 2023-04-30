@@ -25,17 +25,28 @@ public class ProDetailServiceImpl extends ServiceImpl<ProDetailMapper, ProDetail
 
     /**
      * 根据商品id插叙商品详情信息
+     *
      * @param proId
      * @return
      */
     @Override
     public ProDetail getProDetailByProId(Integer proId) {
         LambdaQueryWrapper<ProDetail> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(ProDetail::getFkProProductId,proId);
+        lambdaQueryWrapper.eq(ProDetail::getFkProProductId, proId);
         ProDetail proDetail = proDetailMapper.selectOne(lambdaQueryWrapper);
-        if (LocalUtils.isEmptyAndNull(proDetail)){
+        if (LocalUtils.isEmptyAndNull(proDetail)) {
             //todo 不存在
         }
         return proDetail;
+    }
+
+    /**
+     * 添加商品详情信息
+     *
+     * @param proDetail
+     */
+    @Override
+    public void saveProDetail(ProDetail proDetail) {
+        save(proDetail);
     }
 }

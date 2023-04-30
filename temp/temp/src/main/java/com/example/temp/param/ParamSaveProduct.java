@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Data
@@ -59,8 +60,14 @@ public class ParamSaveProduct {
     private String uniqueCode;
 
     @ApiModelProperty(hidden = true)
+    private HttpServletRequest request;
+
+    @ApiModelProperty(hidden = true)
     private Integer userId;
 
     @ApiModelProperty(hidden = true)
     private Integer shopId;
+
+    @ApiModelProperty(hidden = true)
+    private Integer proId;
 }

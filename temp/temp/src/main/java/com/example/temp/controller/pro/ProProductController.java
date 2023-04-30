@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author monkey king
  * @Date 2019/12/01 4:07
@@ -27,9 +29,10 @@ public class ProProductController extends BaseController {
 
     @RequestMapping(value = "/saveProduct", method = RequestMethod.POST)
     @ApiOperation(value = "添加商品", notes = "添加商品", httpMethod = "POST")
-    public void saveProduct(@RequestBody ParamSaveProduct param) {
+    public void saveProduct(@RequestBody ParamSaveProduct param, HttpServletRequest request) {
         param.setUserId(getUserId());
         param.setShopId(getShopId());
+        param.setRequest(request);
         proProductService.saveProduct(param);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.temp.service.shp;
 
+import com.example.temp.param.ParamShpOperateLogSave;
+
 /**
  * 店铺操作日志表 service
  *
@@ -8,5 +10,10 @@ package com.example.temp.service.shp;
  */
 public interface ShpOperateLogService {
 
-
+    /**
+     * 添加店铺操作日志
+     *
+     * @param param
+     */
+    void saveShpOperateLog(ParamShpOperateLogSave param);
 }
