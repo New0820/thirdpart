@@ -11,8 +11,8 @@ import lombok.Data;
 @ApiModel(description = "修改商品信息")
 public class ParamUpdateProduct extends ParamSaveProduct{
 
-    @ApiModelProperty(name = "proId", value = "商品id", required = true)
-    private String proId;
+    @ApiModelProperty(name = "bidId", value = "bidId", required = true)
+    private String bizId;
 
 
 }

@@ -1,5 +1,8 @@
 package com.example.temp.service.pro;
 
+
+import com.example.temp.entity.pro.ProDetail;
+
 /**
  * 产品详情表;该表和(pro_product)一对一关系 service
  *
@@ -9,4 +12,10 @@ package com.example.temp.service.pro;
 public interface ProDetailService {
 
 
+    /**
+     * 根据商品id查询商品详情信息
+     * @param proId
+     * @return
+     */
+    ProDetail getProDetailByProId(Integer proId);
 }

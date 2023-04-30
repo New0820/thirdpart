@@ -1,10 +1,14 @@
 package com.example.temp.service.pro.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.temp.entity.pro.ProDetail;
 import com.example.temp.mapper.pro.ProDetailMapper;
 import com.example.temp.service.pro.ProDetailService;
+import com.example.temp.util.LocalUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -16,5 +20,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProDetailServiceImpl extends ServiceImpl<ProDetailMapper, ProDetail> implements ProDetailService {
 
+    @Resource
+    private ProDetailMapper proDetailMapper;
 
+    /**
+     * 根据商品id插叙商品详情信息
+     * @param proId
+     * @return
+     */
+    @Override
+    public ProDetail getProDetailByProId(Integer proId) {
+        LambdaQueryWrapper<ProDetail> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(ProDetail::getFkProProductId,proId);
+        ProDetail proDetail = proDetailMapper.selectOne(lambdaQueryWrapper);
+        if (LocalUtils.isEmptyAndNull(proDetail)){
+            //todo 不存在
+        }
+        return proDetail;
+    }
 }
