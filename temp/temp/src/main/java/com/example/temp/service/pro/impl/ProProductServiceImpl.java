@@ -1,6 +1,7 @@
 package com.example.temp.service.pro.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.temp.entity.param.ParamSaveProduct;
 import com.example.temp.entity.pro.ProProduct;
 import com.example.temp.mapper.pro.ProProductMapper;
@@ -19,7 +20,7 @@ import javax.annotation.Resource;
  * @Date 2023-04-30 11:47:17
  */
 @Service
-public class ProProductServiceImpl implements ProProductService {
+public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProduct> implements ProProductService {
 
     @Resource
     private ProProductMapper proProductMapper;
