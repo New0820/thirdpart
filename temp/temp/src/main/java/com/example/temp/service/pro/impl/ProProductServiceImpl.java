@@ -42,7 +42,7 @@ public class ProProductServiceImpl implements ProProductService {
         query.ge("fk_pro_state_code", ConstantNums.TEN);
         query.le("fk_pro_state_code", ConstantNums.TWENTY_NINE);
         Integer productNum = proProductMapper.selectCount(query);
-        if (productNum >= 30) {
+        if (productNum >= ConstantNums.THIRTY) {
             return false;
         }
         return true;
