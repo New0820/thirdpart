@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.example.temp.common.annotate.ForUpdate;
+import com.example.temp.constant.ConstantNums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -90,6 +92,7 @@ public class LocalUtils extends StringUtils {
 
     /**
      * 实体类转换为HashMap
+     *
      * @param obj
      * @param <T>
      * @return
@@ -694,7 +697,6 @@ public class LocalUtils extends StringUtils {
     }
 
 
-
     /**
      * 获取请求token
      *
@@ -869,7 +871,6 @@ public class LocalUtils extends StringUtils {
     }
 
 
-
     /**
      * 把map转换为url参数
      *
@@ -1014,4 +1015,81 @@ public class LocalUtils extends StringUtils {
         // System.out.println(getSuffixType("https://www.xmaibu.com/public/uploads//cache//pic/attachment/image/IWC/IW388103-580x580.JPG"));
     }
 
+    /**
+     * * 获取变更内容
+     *
+     * @param oldBean 更改前的Bean
+     * @param newBean 更改后的Bean
+     * @param <T>
+     * @return
+     */
+    public static <T> String getChangedFields(T oldBean, T newBean) {
+        String name = "";
+        Field[] fields = newBean.getClass().getDeclaredFields();
+        StringBuilder newStr = new StringBuilder("\n[修改后]：");
+        StringBuilder oldStr = new StringBuilder("\n[修改前]：");
+        for (Field field : fields) {
+            field.setAccessible(true);
+            if (!field.isAnnotationPresent(ForUpdate.class)) {
+                continue;
+            }
+            try {
+                Object oldValue = field.get(oldBean);
+                Object newValue = field.get(newBean);
+                if (!Objects.equals(newValue, oldValue)) {
+                    //获取字段名称
+                    if (ConstantNums.ONE.equals(field.getAnnotation(ForUpdate.class).index())) {
+                        name = (String) newValue;
+                    }
+                    String fieldName = field.getAnnotation(ForUpdate.class).fieldName();
+                    oldStr.append(fieldName).append("【").append(oldValue).append("】");
+                    newStr.append(fieldName).append("【").append(newValue).append("】");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.info("比较更新前更新后失败,更新前数据:{},更新后数据:{},错误信息:{}", oldBean, newBean, e.getMessage());
+            }
+        }
+        return newStr.insert(0,name).append(oldStr).toString();
+    }
+
+
+
+    /**
+     * * 获取变更内容
+     *
+     * @param oldBean 更改前的Bean
+     * @param newBean 更改后的Bean
+     * @param <T>
+     * @return
+     */
+    public static <T> String getFields(T oldBean, T newBean) {
+        String name = "";
+        Field[] fields = newBean.getClass().getDeclaredFields();
+        StringBuilder newStr = new StringBuilder("\n[修改后]：");
+        StringBuilder oldStr = new StringBuilder("\n[修改前]：");
+        for (Field field : fields) {
+            field.setAccessible(true);
+            if (!field.isAnnotationPresent(ForUpdate.class)) {
+                continue;
+            }
+            try {
+                Object oldValue = field.get(oldBean);
+                Object newValue = field.get(newBean);
+                if (!Objects.equals(newValue, oldValue)) {
+                    //获取字段名称
+                    if (ConstantNums.ONE.equals(field.getAnnotation(ForUpdate.class).index())) {
+                        name = (String) newValue;
+                    }
+                    String fieldName = field.getAnnotation(ForUpdate.class).fieldName();
+                    oldStr.append(fieldName).append("【").append(oldValue).append("】");
+                    newStr.append(fieldName).append("【").append(newValue).append("】");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.info("比较更新前更新后失败,更新前数据:{},更新后数据:{},错误信息:{}", oldBean, newBean, e.getMessage());
+            }
+        }
+        return newStr.insert(0,name).append(oldStr).toString();
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.temp.entity.pro;
 
+import com.example.temp.common.annotate.ForUpdate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -93,11 +94,13 @@ public class ProProduct {
      * 名称
      */
     @ApiModelProperty(value = "名称")
+    @ForUpdate(fieldName = "商品名称",index = 1)
     private String name;
     /**
      * 产品描述
      */
     @ApiModelProperty(value = "产品描述")
+    @ForUpdate(fieldName = "商品描述")
     private String description;
     /**
      * 货号
@@ -177,22 +180,26 @@ public class ProProduct {
     /**
      * init_price
      */
+    @ForUpdate(fieldName = "成本价")
     @ApiModelProperty(value = "init_price")
     private BigDecimal initPrice;
     /**
-     * 成本价格
+     * 同行价格
      */
-    @ApiModelProperty(value = "成本价格")
+    @ForUpdate(fieldName = "同行价格")
+    @ApiModelProperty(value = "同行价格")
     private BigDecimal tradePrice;
     /**
      * 代理价格
      */
     @ApiModelProperty(value = "代理价格")
+    @ForUpdate(fieldName = "代理价格")
     private BigDecimal agencyPrice;
     /**
      * 销售价格
      */
     @ApiModelProperty(value = "销售价格")
+    @ForUpdate(fieldName = "销售价格")
     private BigDecimal salePrice;
     /**
      * 国内公价(元)

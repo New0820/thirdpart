@@ -15,6 +15,7 @@ import com.example.temp.enums.shp.EnumShpOperateLogModule;
 import com.example.temp.enums.shp.EnumShpOperateLogTypeName;
 import com.example.temp.mapper.pro.ProProductMapper;
 import com.example.temp.param.fin.ParamFundRecordSave;
+import com.example.temp.param.pro.ParamProductDetail;
 import com.example.temp.param.pro.ParamProductSave;
 import com.example.temp.param.pro.ParamProductUpdate;
 import com.example.temp.param.shp.ParamShpOperateLogSave;
@@ -114,7 +115,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         //添加商品详情
         proDetailService.saveProDetail(proDetail);
         //添加店铺操作日志
-        ParamShpOperateLogSave shpOperateLogSave = jointShpOperateLog(param);
+        ParamShpOperateLogSave shpOperateLogSave = jointShpOperateLog(param,ConstantCommon.ES_SAVE,null);
         shpOperateLogService.saveShpOperateLog(shpOperateLogSave);
         //添加账单记录
         ParamFundRecordSave paramFundRecordSave = jointFundRecordSave(param);
@@ -149,15 +150,21 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      * @param param
      * @return
      */
-    public ParamShpOperateLogSave jointShpOperateLog(ParamProductSave param) {
+    public ParamShpOperateLogSave jointShpOperateLog(ParamProductSave param,String source,String operateContent) {
         ParamShpOperateLogSave shpOperateLogSave = new ParamShpOperateLogSave();
         shpOperateLogSave.setShopId(param.getShopId());
         shpOperateLogSave.setOperateUserId(param.getUserId());
         shpOperateLogSave.setModuleName(EnumShpOperateLogModule.PROD.getName());
-        shpOperateLogSave.setOperateName(EnumShpOperateLogTypeName.PRO_UPLOAD.getMsg());
-        String beforeValue = getBeforeValue(param);
-        String prodName = param.getName() + "商品信息：" + beforeValue;
-        shpOperateLogSave.setOperateContent(prodName);
+        if (ConstantCommon.ES_SAVE.equals(source)) {
+            shpOperateLogSave.setOperateName(EnumShpOperateLogTypeName.PRO_UPLOAD.getMsg());
+            String beforeValue = getBeforeValue(param);
+            String prodName = param.getName() + "商品信息：" + beforeValue;
+            shpOperateLogSave.setOperateContent(prodName);
+        }
+        if (ConstantCommon.ES_UPDATE.equals(source)){
+            shpOperateLogSave.setOperateName(EnumShpOperateLogTypeName.PRO_UPDATE.getMsg());
+            shpOperateLogSave.setOperateContent(operateContent);
+        }
         shpOperateLogSave.setProdId(param.getProId());
         shpOperateLogSave.setRequest(param.getRequest());
         return shpOperateLogSave;
@@ -199,6 +206,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      * @param param
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateProduct(ParamProductUpdate param) {
         Date dateTime = new Date();
         Integer userId = param.getUserId();
@@ -206,6 +214,8 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         Map<String, Object> map = checkProductParam(param);
         //添加商品信息
         ProProduct proProduct = (ProProduct) map.get("proProduct");
+        //修改前的商品信息
+        ProProduct oldProProduct = (ProProduct) map.get("oldProProduct");
         proProduct.setUpdateTime(dateTime);
         proProduct.setUpdateAdmin(userId);
         updateById(proProduct);
@@ -215,6 +225,13 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         proDetail.setUpdateAdmin(userId);
         proDetail.setFkProProductId(proProduct.getId());
         proDetailService.updateProDetail(proDetail);
+        //添加店铺日志信息 修改前，修改后
+        String changedFields = LocalUtils.getChangedFields(oldProProduct, proProduct);
+        ParamShpOperateLogSave shpOperateLogSave = jointShpOperateLog(param,ConstantCommon.ES_UPDATE,changedFields);
+        shpOperateLogService.saveShpOperateLog(shpOperateLogSave);
+        //修改前，修改后商品信息
+
+
         productEsService.jointProInfo(proProduct, proDetail, ConstantCommon.ES_UPDATE);
     }
 
@@ -258,21 +275,23 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      * @return
      */
     public Map<String, Object> checkProductParam(ParamProductUpdate param) {
-        ProProduct proProduct = new ProProduct();
+        ProProduct oldProduct = new ProProduct();
+        ProProduct newProduct = new ProProduct();
         ProDetail proDetail = new ProDetail();
         if (!LocalUtils.isEmptyAndNull(param.getBizId())) {
             //查询商品信息
-            proProduct = getProductById(Integer.parseInt(param.getBizId()));
+            oldProduct = getProductById(Integer.parseInt(param.getBizId()));
             //擦亮时间
-            proProduct.setRefreshTime(new Date());
-            if (proProduct.getFkProStateCode() >= EnumProState.SALE_40.getCode() || proProduct.getFkProStateCode() < EnumProState.STAND_BY_10.getCode()) {
+            newProduct.setRefreshTime(new Date());
+            if (oldProduct.getFkProStateCode() >= EnumProState.SALE_40.getCode() || oldProduct.getFkProStateCode() < EnumProState.STAND_BY_10.getCode()) {
                 //todo 提示 【未上架】和【已上架】状态的商品才能修改
             }
             //查询商品详情
-            proDetail = proDetailService.getProDetailByProId(proProduct.getId());
+            proDetail = proDetailService.getProDetailByProId(oldProduct.getId());
+
         }
-        proProduct.setFkShpShopId(param.getShopId());
-        proProduct.setInsertAdmin(param.getUserId());
+        newProduct.setFkShpShopId(param.getShopId());
+        newProduct.setInsertAdmin(param.getUserId());
         //验证当前店铺是否已经添加了30件商品信息
         if (isUpload(param.getShopId())) {
             //todo 这个地方抛出提示不能超过30件商品
@@ -288,7 +307,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         //获取品牌名称
         if (!LocalUtils.isEmptyAndNull(param.getBrandId())) {
             ProBrand proBrand = proBrandService.getProBrandById(Integer.parseInt(param.getBrandId()));
-            proProduct.setFkProClassifySubName(proBrand.getEnName());
+            newProduct.setFkProClassifySubName(proBrand.getEnName());
         }
         //如果品牌id为空，系列id不为空
         if (LocalUtils.isEmptyAndNull(param.getBrandId()) && !LocalUtils.isEmptyAndNull(param.getSeriesId())) {
@@ -296,7 +315,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         } else {
             //获取系列名称
             ProBrandSeries proBrandSeries = proBrandSeriesService.getProBrandSeriesByIdOrBrandId(Integer.parseInt(param.getSeriesId()), Integer.parseInt(param.getBrandId()));
-            proProduct.setFkProSubSeriesName(proBrandSeries.getName());
+            newProduct.setFkProSubSeriesName(proBrandSeries.getName());
         }
         //如果品牌和系列为空，型号不为空
         boolean flag = LocalUtils.isEmptyAndNull(param.getBrandId()) || LocalUtils.isEmptyAndNull(param.getSeriesId());
@@ -304,39 +323,60 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
             //todo 提示请选择系列
         } else {
             ProBrandModel proBrandModel = proBrandModelService.getByBrandModelByIdOrSeriesId(Integer.parseInt(param.getSeriesId()), Integer.parseInt(param.getModelId()));
-            proProduct.setFkProSeriesModelName(proBrandModel.getName());
-            proProduct.setFkProPublicId(proBrandModel.getFkProPublicId());
+            newProduct.setFkProSeriesModelName(proBrandModel.getName());
+            newProduct.setFkProPublicId(proBrandModel.getFkProPublicId());
         }
         //商品名称
-        proProduct.setName(param.getName());
+        newProduct.setName(param.getName());
         //商品属性
-        proProduct.setFkProAttributeCode(ConstantNums.TEN.toString());
+        newProduct.setFkProAttributeCode(ConstantNums.TEN.toString());
         //商品分类
-        proProduct.setFkProClassifyCode(param.getClassify());
+        newProduct.setFkProClassifyCode(param.getClassify());
         //商品首图
-        proProduct.setSmallImg(param.getFirstImg());
+        newProduct.setSmallImg(param.getFirstImg());
         //商品描述
-        proProduct.setDescription(LocalUtils.returnEmptyStringOrString(param.getDescription()));
+        newProduct.setDescription(LocalUtils.returnEmptyStringOrString(param.getDescription()));
         //商品备注
-        proProduct.setRemark(LocalUtils.returnEmptyStringOrString(param.getRemark()));
+        newProduct.setRemark(LocalUtils.returnEmptyStringOrString(param.getRemark()));
         //成本价格
-        proProduct.setInitPrice(new BigDecimal(param.getInitPrice()));
+        newProduct.setInitPrice(new BigDecimal(param.getInitPrice()));
         //销售价格
-        proProduct.setSalePrice(new BigDecimal(param.getSalePrice()));
+        newProduct.setSalePrice(new BigDecimal(param.getSalePrice()));
         //同行价格
-        proProduct.setTradePrice(new BigDecimal(param.getTradePrice()));
+        newProduct.setTradePrice(new BigDecimal(param.getTradePrice()));
         //代理价格
-        proProduct.setAgencyPrice(new BigDecimal(param.getAgencyPrice()));
+        newProduct.setAgencyPrice(new BigDecimal(param.getAgencyPrice()));
         //商品库存默认为1
-        proProduct.setTotalNum(ConstantNums.ONE);
+        newProduct.setTotalNum(ConstantNums.ONE);
         //独立编码
         proDetail.setUniqueCode(param.getUniqueCode());
         //视频图片
         proDetail.setVideoUrl(LocalUtils.returnEmptyStringOrString(param.getVideo()));
 
+
+
         Map<String, Object> map = new HashMap<>(10);
-        map.put("proProduct", proProduct);
+        map.put("proProduct", newProduct);
         map.put("proDetail", proDetail);
+        map.put("oldProduct", oldProduct);
         return map;
+    }
+
+    public static void main(String[] args) {
+        ProProduct oldProduct = new ProProduct();
+        oldProduct.setInitPrice(new BigDecimal("20"));
+        oldProduct.setTradePrice(new BigDecimal("30"));
+        oldProduct.setAgencyPrice(new BigDecimal("40"));
+        oldProduct.setSalePrice(new BigDecimal("50"));
+        oldProduct.setName("李大炮");
+        oldProduct.setDescription("测试1");
+        ProProduct newProduct = new ProProduct();
+        newProduct.setInitPrice(new BigDecimal("220"));
+        newProduct.setTradePrice(new BigDecimal("330"));
+        newProduct.setAgencyPrice(new BigDecimal("440"));
+        newProduct.setSalePrice(new BigDecimal("540"));
+        newProduct.setName("李大炮1");
+        newProduct.setDescription("测试2");
+        System.out.println(LocalUtils.getChangedFields(oldProduct, newProduct));
     }
 }

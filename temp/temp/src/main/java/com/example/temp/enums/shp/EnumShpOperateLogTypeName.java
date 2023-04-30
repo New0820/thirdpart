@@ -7,7 +7,8 @@ package com.example.temp.enums.shp;
  */
 public enum EnumShpOperateLogTypeName {
 
-    PRO_UPLOAD("proUpload", "商品入库");
+    PRO_UPLOAD("proUpload", "商品入库"),
+    PRO_UPDATE("proUpdate","修改商品");
 
 
     private String code;
