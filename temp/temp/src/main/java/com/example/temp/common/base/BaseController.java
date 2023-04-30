@@ -41,7 +41,7 @@ public class BaseController {
      */
     protected int getUserId() {
         String token = getToken();
-        Integer userIdValue = 0;
+        int userIdValue = 0;
         if (!LocalUtils.isEmptyAndNull(token)) {
             final val userId = redisUtil.get("userId");
             if (StringUtils.isNotBlank(userId)) {
@@ -58,7 +58,7 @@ public class BaseController {
      */
     protected int getShopId() {
         String token = getToken();
-        Integer userIdValue = 0;
+        int userIdValue = 0;
         if (!LocalUtils.isEmptyAndNull(token)) {
             final val userId = redisUtil.get("shopId");
             if (StringUtils.isNotBlank(userId)) {
@@ -66,5 +66,22 @@ public class BaseController {
             }
         }
         return userIdValue;
+    }
+
+    /**
+     * 获取店铺名称
+     *
+     * @return
+     */
+    protected String getShopName() {
+        String token = getToken();
+        String shopName = "";
+        if (!LocalUtils.isEmptyAndNull(token)) {
+            final val userId = redisUtil.get("shopName");
+            if (StringUtils.isNotBlank(userId)) {
+                shopName = shopName;
+            }
+        }
+        return shopName;
     }
 }
