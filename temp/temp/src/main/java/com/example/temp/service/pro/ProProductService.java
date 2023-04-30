@@ -1,7 +1,7 @@
 package com.example.temp.service.pro;
 
-import com.example.temp.param.ParamSaveProduct;
-import com.example.temp.param.ParamUpdateProduct;
+import com.example.temp.param.pro.ParamProductSave;
+import com.example.temp.param.pro.ParamProductUpdate;
 
 /**
  * 产品表;该表和(pro_detail)一对一关系 service
@@ -16,12 +16,14 @@ public interface ProProductService {
      *
      * @param param
      */
-    void saveProduct(ParamSaveProduct param);
+    void saveProduct(ParamProductSave param);
 
 
     /**
      * 修改商品
      * @param param
      */
-    void updateProduct(ParamUpdateProduct param);
+    void updateProduct(ParamProductUpdate param);
+
+    String getBeforeValue(ParamProductSave param);
 }

@@ -1,5 +1,9 @@
 package com.example.temp.service.fin;
 
+import com.example.temp.entity.fin.FinFundRecord;
+
+import java.util.List;
+
 /**
  * 资金流水记录表 service
  *
@@ -9,4 +13,10 @@ package com.example.temp.service.fin;
 public interface FinFundRecordService {
 
 
+    /**
+     * 保存资金流水信息
+     *
+     * @param finFundRecords
+     */
+    void saveFundRecords(List<FinFundRecord> finFundRecords);
 }

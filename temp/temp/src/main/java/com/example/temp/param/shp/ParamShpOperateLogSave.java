@@ -1,4 +1,4 @@
-package com.example.temp.param;
+package com.example.temp.param.shp;
 
 import lombok.Data;
 

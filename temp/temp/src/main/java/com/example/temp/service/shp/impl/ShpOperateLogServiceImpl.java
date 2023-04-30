@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.temp.entity.shp.ShpOperateLog;
 import com.example.temp.entity.shp.ShpUserShopRef;
 import com.example.temp.mapper.shp.ShpOperateLogMapper;
-import com.example.temp.param.ParamShpOperateLogSave;
+import com.example.temp.param.shp.ParamShpOperateLogSave;
 import com.example.temp.service.shp.ShpOperateLogService;
 import com.example.temp.service.shp.ShpUserShopRefService;
 import com.example.temp.util.DateUtil;

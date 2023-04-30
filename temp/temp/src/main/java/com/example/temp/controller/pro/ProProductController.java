@@ -1,7 +1,7 @@
 package com.example.temp.controller.pro;
 
 import com.example.temp.common.base.BaseController;
-import com.example.temp.param.ParamSaveProduct;
+import com.example.temp.param.pro.ParamProductSave;
 import com.example.temp.service.pro.ProProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,10 +29,11 @@ public class ProProductController extends BaseController {
 
     @RequestMapping(value = "/saveProduct", method = RequestMethod.POST)
     @ApiOperation(value = "添加商品", notes = "添加商品", httpMethod = "POST")
-    public void saveProduct(@RequestBody ParamSaveProduct param, HttpServletRequest request) {
+    public void saveProduct(@RequestBody ParamProductSave param, HttpServletRequest request) {
         param.setUserId(getUserId());
         param.setShopId(getShopId());
         param.setRequest(request);
+        param.setShopName(getShopName());
         proProductService.saveProduct(param);
     }
 }

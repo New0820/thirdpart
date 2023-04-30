@@ -1,6 +1,6 @@
 package com.example.temp.service.shp;
 
-import com.example.temp.param.ParamShpOperateLogSave;
+import com.example.temp.param.shp.ParamShpOperateLogSave;
 
 /**
  * 店铺操作日志表 service

@@ -6,11 +6,18 @@ import com.example.temp.constant.ConstantCommon;
 import com.example.temp.constant.ConstantNums;
 import com.example.temp.constant.ConstantRedisKey;
 import com.example.temp.entity.pro.*;
+import com.example.temp.enums.pro.EnumProModifyRecordState;
+import com.example.temp.enums.pro.EnumProModifyRecordType;
+import com.example.temp.enums.fin.EnumFinShopRecordInoutType;
 import com.example.temp.enums.shp.EnumShpOperateLogModule;
+import com.example.temp.enums.shp.EnumShpSource;
 import com.example.temp.mapper.pro.ProProductMapper;
-import com.example.temp.param.ParamSaveProduct;
-import com.example.temp.param.ParamShpOperateLogSave;
-import com.example.temp.param.ParamUpdateProduct;
+import com.example.temp.param.fin.ParamFundRecordSave;
+import com.example.temp.param.pro.ParamProModifyRecordSave;
+import com.example.temp.param.pro.ParamProductSave;
+import com.example.temp.param.pro.ParamProductUpdate;
+import com.example.temp.param.shp.ParamShpOperateLogSave;
+import com.example.temp.service.fin.FinBillService;
 import com.example.temp.service.pro.*;
 import com.example.temp.service.shp.ShpOperateLogService;
 import com.example.temp.util.LocalUtils;
@@ -21,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,26 +67,63 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
     @Resource
     private ProBrandModelService proBrandModelService;
 
+    @Resource
+    private FinBillService finBillService;
+
+    @Resource
+    private ProModifyRecordService proModifyRecordService;
+
     /**
      * 添加商品
      *
      * @param param
      */
     @Override
-    public void saveProduct(ParamSaveProduct param) {
-        ParamUpdateProduct paramUpdateProduct = new ParamUpdateProduct();
+    public void saveProduct(ParamProductSave param) {
+        ParamProductUpdate paramUpdateProduct = new ParamProductUpdate();
         BeanUtils.copyProperties(paramUpdateProduct, param);
         //对基础参数封装和校验
         Map<String, Object> map = checkProductParam(paramUpdateProduct);
         ProProduct proProduct = (ProProduct) map.get("proProduct");
+        Date date = new Date();
+        proProduct.setInsertTime(date);
+        proProduct.setUpdateTime(date);
         save(proProduct);
         ProDetail proDetail = (ProDetail) map.get("proDetail");
+        proDetail.setInsertTime(date);
+        proDetail.setUpdateTime(date);
         proDetail.setFkProProductId(proProduct.getId());
         //添加商品详情
         proDetailService.saveProDetail(proDetail);
         //添加店铺操作日志
         ParamShpOperateLogSave shpOperateLogSave = jointShpOperateLog(param);
         shpOperateLogService.saveShpOperateLog(shpOperateLogSave);
+        //添加账单记录
+        ParamFundRecordSave paramFundRecordSave = jointFundRecordSave(param);
+        finBillService.saveProductFundRecord(paramFundRecordSave);
+        //商品记录信息
+        proModifyRecordService.saveProModifyRecord(param);
+        //添加商品数量记录信息
+        proModifyRecordService.saveProModifyRecordNum(param);
+    }
+
+    /**
+     * 拼接账单流水记录
+     *
+     * @param param
+     * @return
+     */
+    public ParamFundRecordSave jointFundRecordSave(ParamProductSave param) {
+        ParamFundRecordSave fundRecordSave = new ParamFundRecordSave();
+        fundRecordSave.setShopId(param.getShopId());
+        fundRecordSave.setUserId(param.getUserId());
+        fundRecordSave.setMoney(param.getInitPrice());
+        fundRecordSave.setState(EnumFinShopRecordInoutType.OUT.getName());
+        fundRecordSave.setFundType(ConstantCommon.TEN);
+        fundRecordSave.setCount(ConstantCommon.ONE);
+        fundRecordSave.setFinClassifyName("入库记录");
+        fundRecordSave.setAttributeCode(ConstantCommon.TEN);
+        return fundRecordSave;
     }
 
     /**
@@ -87,16 +132,13 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      * @param param
      * @return
      */
-    public ParamShpOperateLogSave jointShpOperateLog(ParamSaveProduct param) {
+    public ParamShpOperateLogSave jointShpOperateLog(ParamProductSave param) {
         ParamShpOperateLogSave shpOperateLogSave = new ParamShpOperateLogSave();
         shpOperateLogSave.setShopId(param.getShopId());
         shpOperateLogSave.setOperateUserId(param.getUserId());
         shpOperateLogSave.setModuleName(EnumShpOperateLogModule.PROD.getName());
         shpOperateLogSave.setOperateName("商品入库");
-        String str = "成本价:";
-        String beforeValue = str + formatPrice(param.getInitPrice()) + ",同行价:" + formatPrice(param.getTradePrice())
-                + ",代理价:" + formatPrice(param.getAgencyPrice()) + ",销售价:" + formatPrice(param.getSalePrice()) + ",商品属性:"
-                + servicesUtil.getAttributeCn(ConstantNums.TEN.toString(), true);
+        String beforeValue = getBeforeValue(param);
         String prodName = param.getName() + "商品信息：" + beforeValue;
         shpOperateLogSave.setOperateContent(prodName);
         shpOperateLogSave.setProdId(param.getProId());
@@ -104,6 +146,25 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
         return shpOperateLogSave;
     }
 
+    /**
+     * 获取修改前信息
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public String getBeforeValue(ParamProductSave param) {
+        return "成本价:" + formatPrice(param.getInitPrice()) + ",同行价:" + formatPrice(param.getTradePrice())
+                + ",代理价:" + formatPrice(param.getAgencyPrice()) + ",销售价:" + formatPrice(param.getSalePrice()) + ",商品属性:"
+                + servicesUtil.getAttributeCn(ConstantNums.TEN.toString(), true);
+    }
+
+    /**
+     * 格式化价格
+     *
+     * @param object
+     * @return
+     */
     public BigDecimal formatPrice(Object object) {
         try {
             return LocalUtils.formatPrice(LocalUtils.calcNumber(LocalUtils.isEmptyAndNull(object) ? 0 : object, "*", 0.01));
@@ -119,7 +180,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      * @param param
      */
     @Override
-    public void updateProduct(ParamUpdateProduct param) {
+    public void updateProduct(ParamProductUpdate param) {
         //对基础参数封装和校验
         Map<String, Object> map = checkProductParam(param);
     }
@@ -163,7 +224,7 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      * @param param
      * @return
      */
-    public Map<String, Object> checkProductParam(ParamUpdateProduct param) {
+    public Map<String, Object> checkProductParam(ParamProductUpdate param) {
         ProProduct proProduct = new ProProduct();
         ProDetail proDetail = new ProDetail();
         if (!LocalUtils.isEmptyAndNull(param.getBizId())) {

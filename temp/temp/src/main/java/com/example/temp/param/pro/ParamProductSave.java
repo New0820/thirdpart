@@ -1,4 +1,4 @@
-package com.example.temp.param;
+package com.example.temp.param.pro;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @ApiModel(description = "添加商品信息")
-public class ParamSaveProduct {
+public class ParamProductSave {
 
     @ApiModelProperty(name = "name", value = "商品名称", required = true)
     private String name;
@@ -67,4 +67,7 @@ public class ParamSaveProduct {
 
     @ApiModelProperty(hidden = true)
     private Integer proId;
+
+    @ApiModelProperty(hidden = true)
+    private String shopName;
 }

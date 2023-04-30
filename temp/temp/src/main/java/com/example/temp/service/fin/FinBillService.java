@@ -1,5 +1,7 @@
 package com.example.temp.service.fin;
 
+import com.example.temp.param.fin.ParamFundRecordSave;
+
 /**
  * 帐单表 service
  *
@@ -9,4 +11,10 @@ package com.example.temp.service.fin;
 public interface FinBillService {
 
 
+    /**
+     * 新增商品添加账单记录
+     *
+     * @param param
+     */
+    void saveProductFundRecord(ParamFundRecordSave param);
 }

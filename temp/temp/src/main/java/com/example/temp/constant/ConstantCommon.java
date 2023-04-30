@@ -66,6 +66,8 @@ ConstantCommon {
 
     public static final int THIRTY = 30;
 
+    public static final String THIRTY_STR = "30";
+
     public static final int FORTY = 40;
 
     public static final int TWELVE = 12;
