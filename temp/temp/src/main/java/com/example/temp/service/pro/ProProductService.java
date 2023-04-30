@@ -1,6 +1,7 @@
 package com.example.temp.service.pro;
 
 import com.example.temp.entity.param.ParamSaveProduct;
+import com.example.temp.entity.param.ParamUpdateProduct;
 
 /**
  * 产品表;该表和(pro_detail)一对一关系 service
@@ -16,4 +17,11 @@ public interface ProProductService {
      * @param param
      */
     void saveProduct(ParamSaveProduct param);
+
+
+    /**
+     * 修改商品
+     * @param param
+     */
+    void updateProduct(ParamUpdateProduct param);
 }
