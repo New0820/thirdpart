@@ -87,39 +87,41 @@ public class ProProductServiceImpl extends ServiceImpl<ProProductMapper, ProProd
      */
     @Override
     public void saveProduct(ParamProductSave param) {
+        ParamProductUpdate paramUpdateProduct = new ParamProductUpdate();
+        BeanUtils.copyProperties(paramUpdateProduct, param);
+        //对基础参数封装和校验
+        Map<String, Object> map = checkProductParam(paramUpdateProduct);
+        ProProduct proProduct = (ProProduct) map.get("proProduct");
+        Date date = new Date();
+        long autoNumber = 0L;
         try {
-            ParamProductUpdate paramUpdateProduct = new ParamProductUpdate();
-            BeanUtils.copyProperties(paramUpdateProduct, param);
-            //对基础参数封装和校验
-            Map<String, Object> map = checkProductParam(paramUpdateProduct);
-            ProProduct proProduct = (ProProduct) map.get("proProduct");
-            Date date = new Date();
             //生成独立编码
-            long autoNumber = LocalUtils.calcNumber(proProduct.getId(), "+", 1000000).longValue();
-            proProduct.setInsertTime(date);
-            proProduct.setUpdateTime(date);
-            save(proProduct);
-            ProDetail proDetail = (ProDetail) map.get("proDetail");
-            proDetail.setInsertTime(date);
-            proDetail.setUpdateTime(date);
-            proDetail.setFkProProductId(proProduct.getId());
-            //添加商品详情
-            proDetailService.saveProDetail(proDetail);
-            //添加店铺操作日志
-            ParamShpOperateLogSave shpOperateLogSave = jointShpOperateLog(param);
-            shpOperateLogService.saveShpOperateLog(shpOperateLogSave);
-            //添加账单记录
-            ParamFundRecordSave paramFundRecordSave = jointFundRecordSave(param);
-            finBillService.saveProductFundRecord(paramFundRecordSave);
-            //商品记录信息
-            proModifyRecordService.saveProModifyRecord(param);
-            //添加商品数量记录信息
-            proModifyRecordService.saveProModifyRecordNum(param);
-            productEsService.jointProInfo(proProduct, proDetail, ConstantCommon.ES_SAVE);
+            autoNumber = LocalUtils.calcNumber(proProduct.getId(), "+", 1000000).longValue();
         } catch (Exception e) {
             log.info("添加商品信息失败,请求参数:{},异常信息:{}", param, e.getMessage());
-            //todo 抛出给用户看的添加商品失败
+            //todo 系统维护升级中
         }
+        proProduct.setInsertTime(date);
+        proProduct.setUpdateTime(date);
+        save(proProduct);
+        ProDetail proDetail = (ProDetail) map.get("proDetail");
+        proDetail.setInsertTime(date);
+        proDetail.setUpdateTime(date);
+        proDetail.setAutoNumber(autoNumber + "");
+        proDetail.setFkProProductId(proProduct.getId());
+        //添加商品详情
+        proDetailService.saveProDetail(proDetail);
+        //添加店铺操作日志
+        ParamShpOperateLogSave shpOperateLogSave = jointShpOperateLog(param);
+        shpOperateLogService.saveShpOperateLog(shpOperateLogSave);
+        //添加账单记录
+        ParamFundRecordSave paramFundRecordSave = jointFundRecordSave(param);
+        finBillService.saveProductFundRecord(paramFundRecordSave);
+        //商品记录信息
+        proModifyRecordService.saveProModifyRecord(param);
+        //添加商品数量记录信息
+        proModifyRecordService.saveProModifyRecordNum(param);
+        productEsService.jointProInfo(proProduct, proDetail, ConstantCommon.ES_SAVE);
     }
 
     /**
